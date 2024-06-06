@@ -2,10 +2,10 @@
 // @id iitc-plugin-ingressportalcsvexport@zetaphor
 // @name IITC Plugin: Ingress Portal CSV Export
 // @category Information
-// @version 0.0.5
+// @version 0.0.6
 // @namespace http://github.com/Zetaphor/IITC-Ingress-Portal-CSV-Export
-// @updateURL https://raw.githubusercontent.com/Zetaphor/IITC-Ingress-Portal-CSV-Export/master/ingress_export.js
-// @downloadURL https://raw.githubusercontent.com/Zetaphor/IITC-Ingress-Portal-CSV-Export/master/ingress_export.js
+// @updateURL https://raw.githubusercontent.com/neon-ninja/IITC-Ingress-Portal-CSV-Export/master/ingress_export.js
+// @downloadURL https://raw.githubusercontent.com/neon-ninja/IITC-Ingress-Portal-CSV-Export/master/ingress_export.js
 // @description Exports portals to a CSV list
 // @include https://*ingress.com/intel*
 // @include http://*ingress.com/intel*
@@ -208,14 +208,13 @@ function wrapper() {
     };
 
     self.setZoomLevel = function() {
-        window.map.setZoom(15);
-        $('#currentZoomLevel').html('15');
+        window.getDataZoomForMapZoom = function() { return 15; };
         self.updateZoomStatus();
     };
 
     self.updateZoomStatus = function() {
-        var zoomLevel = window.map.getZoom();
-        $('#currentZoomLevel').html(window.map.getZoom());
+        var zoomLevel = window.getDataZoomForMapZoom(window.map.getZoom());
+        $('#currentZoomLevel').html(zoomLevel);
         if (zoomLevel != 15) {
             window.current_area_scraped = false;
             $('#currentZoomLevel').css('color', 'red');
@@ -227,7 +226,7 @@ function wrapper() {
     self.updateTimer = function() {
         self.updateZoomStatus();
         if (window.portal_scraper_enabled) {
-            if (window.map.getZoom() == 15) {
+            if (window.getDataZoomForMapZoom(window.map.getZoom()) == 15) {
                 if ($('#innerstatus > span.map > span').html() === 'done') {
                     if (!window.current_area_scraped) {
                         self.checkPortals(window.portals);
